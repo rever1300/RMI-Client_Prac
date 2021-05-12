@@ -1,11 +1,11 @@
 package Common;
 
-import Client.StudentImpl;
+import ExamModels.QuestionsLike;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface ProfessorInt extends Remote {
-    void register(StudentImpl student, String name) throws RemoteException;
-
+    void register(StudentInt student, String name) throws RemoteException;
+    void sendAnswer(String student, QuestionsLike questionsLike);
 }

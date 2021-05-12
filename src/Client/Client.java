@@ -2,42 +2,48 @@ package Client;
 
 import Common.ProfessorInt;
 import Common.StudentInt;
+import ExamModels.QuestionsLike;
 
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Scanner;
 
-import ExamModels.QuestionsLike;
-
 public class Client {
 
-    public static void main(String[] args){
-        String host = (args.length <1) ? null : args[0];
-
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String host = (args.length < 1) ? null : args[0];
         try {
+            /*Get registry from the locateRegistry*/
             Registry registry = LocateRegistry.getRegistry(host);
-            StudentImpl student = new StudentImpl();
-            ProfessorInt stub = (ProfessorInt) registry.lookup("Exam Online");
-            System.out.println("Write your name; ");
-            Scanner scanner = new Scanner(System.in);
-            String name = scanner.nextLine();
-            stub.register(student, name);
-            System.out.println("Client join, waiting to start de exam");
+            System.out.print("Enter your student id:");
+            String id = scanner.nextLine();
+            System.out.print("Exam will start soon...");
 
+            /*Creating instances of both integrates*/
+            ProfessorInt professorInt = (ProfessorInt) registry.lookup("EXAM");
+            StudentImpl student = new StudentImpl(id, professorInt);
+
+            /*Remote call for registering*/
+            professorInt.register(student, id);
+
+            /*Synchoronize block for the student when the exams is about to start*/
             synchronized (student){
+                /*This wait for the registry time*/
                 student.wait();
                 while(true){
-                    QuestionsLike questionsLike = student.setAnswer();
-                    stub.getAnswer(name, questionsLike);
-
+                    /*This wait for the question receiving time*/
+                    student.wait();
+                    QuestionsLike question = student.obtainAnswer();
+                    professorInt.sendAnswer(id, question);
                 }
             }
 
-
-
-
-        }catch (Exception e){
-            System.err.println("Client exception: " +e.toString()); e.printStackTrace();
+        } catch (RemoteException | NotBoundException | InterruptedException e) {
+            e.printStackTrace();
         }
+        System.exit(0);
     }
 }

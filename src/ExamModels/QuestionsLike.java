@@ -3,7 +3,7 @@ package ExamModels;
 import java.io.Serializable;
 import java.util.List;
 
-
+/*Implements Serializable because we want to send questions (not primitive types)*/
 public class QuestionsLike implements Serializable {
 
     private int questionNum;
@@ -22,6 +22,7 @@ public class QuestionsLike implements Serializable {
         this.answer = answer;
     }
 
+
     public int getAnswer() {
         return this.answer;
     }
@@ -35,8 +36,7 @@ public class QuestionsLike implements Serializable {
                 answer < this.choices.size();
     }
 
-
-
+    /*This override is how to make the question to the student*/
     @Override
     public String toString(){
         String sendQT = new String("\n" + "Question number " + this.questionNum + ": " + this.stat + "\n");
