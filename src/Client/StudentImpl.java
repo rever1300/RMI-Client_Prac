@@ -33,7 +33,7 @@ public class StudentImpl extends UnicastRemoteObject implements StudentInt {
     }
 
     @Override
-    public void sendQuestion(QuestionsLike questions) {
+    public synchronized void sendQuestion(QuestionsLike questions) {
         System.out.print(questions);
         this.questionsLike = questions;
         /*Notify because the server reacts to send us another question*/
@@ -41,7 +41,7 @@ public class StudentImpl extends UnicastRemoteObject implements StudentInt {
     }
 
     @Override
-    public void startExam(String message) {
+    public synchronized void startExam(String message) {
         System.out.print(message);
         /*Notify because the start of the exam waiting time*/
         notify();
