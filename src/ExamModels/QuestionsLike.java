@@ -40,8 +40,8 @@ public class QuestionsLike implements Serializable {
     @Override
     public String toString(){
         String sendQT = new String("\n" + "Question number " + this.questionNum + ": " + this.stat + "\n");
-        for(int i = 0; i<this.choices.size(); ++i){
-            sendQT = sendQT + "     " + i+1 + ". " + this.choices.get(i) + "\n";
+        for(int i = 1; i<this.choices.size(); ++i){
+            sendQT = sendQT + "     " + i + ". " + this.choices.get(i) + "\n";
         }
         return sendQT;
     }
