@@ -41,8 +41,10 @@ public class Client {
                 }
             }
 
-        } catch (RemoteException | NotBoundException | InterruptedException e) {
+        } catch (RemoteException | InterruptedException e) {
             e.printStackTrace();
+        } catch(NotBoundException e){
+            System.out.print("The exam session has not started yet!");
         }
         System.exit(0);
     }
